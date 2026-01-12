@@ -5,7 +5,7 @@ import AppApi from '@/api/app.api';
 import ListResponse from '@/shared/models/common/list-response';
 import LogoItem from '@/shared/models/logos/logo-item';
 
-function getLogosQueryParams(searchQuery: string | null, category: string | null) {
+export function getLogosQueryParams(searchQuery: string | null, category: string | null) {
   return {
     queryKey: ['logos', searchQuery, category],
     queryFn: ({ pageParam = 0 }) =>
@@ -23,4 +23,9 @@ function getLogosQueryParams(searchQuery: string | null, category: string | null
   }
 }
 
-export default getLogosQueryParams;
+export function getCategoriesQueryParams() {
+  return {
+    queryKey: ['categories'],
+    queryFn: AppApi.getCategories,
+  }
+}

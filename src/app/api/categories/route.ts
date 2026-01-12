@@ -1,33 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-// data
-import LOGOS_DATA from "@/shared/constants/logos-data";
+// lib
+import { getCategories } from '@/lib/categories';
 
 // helpers
-import toErrorResponse from "@/shared/helpers/to-error-response";
-import normalizeString from "@/shared/helpers/normalize-string";
+import toErrorResponse from '@/shared/helpers/to-error-response';
 
 // constants
 import CACHE_HEADERS from '@/shared/constants/cache-headers';
 
-// personal constants
-const uniqueCategories = Array.from(
-  new Set(
-    LOGOS_DATA
-      .flatMap((logo) => [logo.mainCategory, ...logo.secondaryCategories])
-      .map(normalizeString)
-      .filter(Boolean)
-  )
-).sort();
-
-// request
 export async function GET() {
   try {
-    return NextResponse.json(uniqueCategories, {
+    const data = await getCategories();
+    return NextResponse.json(data, {
       status: 200,
       headers: CACHE_HEADERS,
     });
   } catch {
-    return toErrorResponse(500, "INTERNAL_ERROR", "Unexpected server error.");
+    return toErrorResponse(500, 'INTERNAL_ERROR', 'Unexpected server error.');
   }
 }

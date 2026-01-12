@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
 
 // providers
 import { ThemeProvider } from '@/providers/theme-provider';
@@ -12,50 +12,51 @@ import { Sidebar } from '@/components/Sidebar';
 import { Toaster } from '@/components/ui/sonner';
 
 // styles
-import "./globals.css";
+import './globals.css';
 
 // custom constants
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Crypto Logos - Free SVG Logo Collection",
-  description: "Browse and download 576+ crypto and tech logos in SVG format",
+  title: 'Crypto Logos - Free SVG Logo Collection',
+  description: 'Browse and download 576+ crypto and tech logos in SVG format',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+// custom models
+type Props = Readonly<{
   children: ReactNode;
-}>) {
+}>;
+
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <QueryProvider>
-            <Header />
-            <Sidebar />
-            <main className="flex-1 flex flex-col pl-64">
-              {children}
-            </main>
-            <Toaster />
-          </QueryProvider>
-        </ThemeProvider>
-      </body>
+    <body
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+    >
+    <ThemeProvider
+      enableSystem
+      disableTransitionOnChange
+      attribute="class"
+      defaultTheme="system"
+    >
+      <QueryProvider>
+        <Header />
+        <Sidebar />
+        <main className="flex-1 flex flex-col pl-64">
+          {children}
+        </main>
+        <Toaster />
+      </QueryProvider>
+    </ThemeProvider>
+    </body>
     </html>
   );
 }

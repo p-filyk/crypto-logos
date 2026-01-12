@@ -5,7 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Folder } from 'lucide-react';
 
 // queries
-import getLogosQueryParams from '@/queries/logos.query';
+import { getLogosQueryParams } from '@/queries/app-queries';
 
 // components
 import SearchBar from './SearchBar';

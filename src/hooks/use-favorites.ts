@@ -18,6 +18,10 @@ export function useFavorites() {
 
   // helpers
   function loadFavorites(): Set<string> {
+    if (typeof window === 'undefined') {
+      return new Set();
+    }
+
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
 

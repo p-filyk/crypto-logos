@@ -1,14 +1,14 @@
 import { QueryClient, HydrationBoundary, dehydrate } from '@tanstack/react-query';
 
 // queries
-import getLogosQueryParams from '@/queries/logos.query';
+import { getLogosQueryParams } from '@/queries/app-queries';
 
 // components
 import LogosSection from '@/components/home/LogosSection';
 
 // custom models
 interface Props {
-  searchParams: { q?: string; category?: string };
+  searchParams: Promise<{ q?: string; category?: string }>;
 }
 
 export default async function Home({
@@ -18,14 +18,12 @@ export default async function Home({
   const queryClient = new QueryClient();
 
   // computed
-  const searchQuery = searchParams.q || '';
-  const category = searchParams.category || null;
+  const { q: searchQuery = '', category = null } = await searchParams;
 
   // prefetch
-  await queryClient.prefetchInfiniteQuery({
-    ...getLogosQueryParams(searchQuery, category),
-    pages: 1,
-  });
+  await queryClient.prefetchInfiniteQuery(
+    getLogosQueryParams(searchQuery, category),
+  );
 
   return (
     <div className="flex-1 flex flex-col p-6">

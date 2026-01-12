@@ -8,6 +8,7 @@ import { copyLogoToClipboard, downloadLogo } from '@/shared/helpers/logo-actions
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Image } from '@/components/ui/image';
 import FavoriteToggle from '@/components/FavoriteToggle';
 
 // models
@@ -55,7 +56,13 @@ export default function LogoCard({ logo }: Props) {
         <FavoriteToggle id={logo.id} />
       </div>
 
-      <img className="mt-1.5 mb-4 mx-auto" src={logo.mainLogo.url} alt={logo.name} height={40} />
+      <Image
+        className="mt-1.5 mb-4 mx-auto min-w-10 h-10"
+        fallbackText="No logo"
+        src={logo.mainLogo.url}
+        alt={logo.name}
+        height={40}
+      />
 
       <h3 className="font-medium text-lg text-center mb-1">{logo.name}</h3>
 
