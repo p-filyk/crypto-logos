@@ -1,0 +1,52 @@
+import { ArrowUpDown } from 'lucide-react';
+
+// components
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+
+// models
+import LogosSortBy from '@/shared/models/logos/logos-sort-by';
+
+// custom models
+interface Props {
+  value: LogosSortBy;
+  onChange: (value: LogosSortBy) => void;
+}
+
+// custom constants
+const sortOptions: { value: LogosSortBy; label: string }[] = [
+  { value: LogosSortBy.NameAsc, label: 'Sort A-Z' },
+  { value: LogosSortBy.NameDesc, label: 'Sort Z-A' },
+];
+
+export default function SortDropdown({ value, onChange }: Props) {
+  // computed
+  const currentOption = sortOptions.find((opt) => opt.value === value) || sortOptions[0];
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="gap-2">
+          <ArrowUpDown className="h-4 w-4" />
+          {currentOption.label}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {sortOptions.map((option) => (
+          <DropdownMenuItem
+            key={option.value}
+            onClick={() => onChange(option.value)}
+            className={value === option.value ? 'bg-accent' : ''}
+          >
+            {option.label}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

@@ -1,5 +1,3 @@
-import type { NextResponse } from 'next/server';
-
 // helpers
 import toErrorResponse from '@/shared/helpers/to-error-response';
 import toInt from '@/shared/helpers/to-int';

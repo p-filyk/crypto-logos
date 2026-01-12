@@ -3,7 +3,7 @@ import { Settings, Send } from "lucide-react";
 
 // components
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Header() {
   return (

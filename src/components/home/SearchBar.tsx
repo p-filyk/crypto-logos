@@ -1,0 +1,88 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { Search, X } from 'lucide-react';
+
+// components
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+
+// custom models
+interface Props {
+  value: string;
+}
+
+export default function SearchBar({ value }: Props) {
+  // common
+  const router = useRouter();
+
+  // refs
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // states
+  const [searchQuery, setSearchQuery] = useState(value);
+
+  // effects
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const params = new URLSearchParams(window.location.search);
+      if (searchQuery) {
+        params.set('q', searchQuery);
+      } else {
+        params.delete('q');
+      }
+      const newUrl = params.toString() ? `/?${params.toString()}` : '/';
+      router.push(newUrl);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [searchQuery, router]);
+
+  // Keyboard shortcut (⌘K / Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // helpers
+  function handleClear(): void {
+    setSearchQuery('');
+    inputRef.current?.focus();
+  }
+
+  return (
+    <div className="relative">
+      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <Input
+        ref={inputRef}
+        type="text"
+        placeholder="Search logos..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="pl-9 h-10.5 pr-20"
+      />
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+        {searchQuery && (
+          <button
+            onClick={handleClear}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Clear search"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+        <Badge variant="outline" className="text-xs">
+          ⌘K
+        </Badge>
+      </div>
+    </div>
+  );
+}
