@@ -40,6 +40,7 @@ export function Image({
   return (
     <>
       {loading && <Skeleton className={cn(className, skeletonClassName)} />}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         {...props}
         src={src}

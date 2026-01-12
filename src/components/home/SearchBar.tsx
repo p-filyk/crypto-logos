@@ -32,8 +32,7 @@ export default function SearchBar({ value }: Props) {
       } else {
         params.delete('q');
       }
-      const newUrl = params.toString() ? `/?${params.toString()}` : '/';
-      router.push(newUrl);
+      router.push(`${window.location.pathname}?${params.toString()}`);
     }, 300);
 
     return () => clearTimeout(timeout);
