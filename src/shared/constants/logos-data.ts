@@ -1,5 +1,3 @@
-'use client';
-
 // models
 import type LogoItem from '@/shared/models/logos/logo-item';
 
