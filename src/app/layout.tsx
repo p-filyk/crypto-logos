@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 // providers
 import { ThemeProvider } from '@/providers/theme-provider';
 import QueryProvider from '@/providers/QueryProvider';
+import { FavoritesProvider } from '@/providers/FavoritesProvider';
 
 // components
 import { Header } from '@/components/Header';
@@ -13,7 +14,6 @@ import { Toaster } from '@/components/ui/sonner';
 
 // styles
 import './globals.css';
-import { FavoritesProvider } from '@/providers/FavoritesProvider';
 
 // custom constants
 const geistSans = Geist({
