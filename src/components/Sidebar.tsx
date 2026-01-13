@@ -5,6 +5,7 @@ import { Home, Heart, Cloud, Code, Package } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CategoryList from '@/components/CategoryList';
+import FavoritesCountBadge from '@/components/FavoritesCountBadge';
 
 // custom constants
 const mainNavigation = [
@@ -23,14 +24,21 @@ export async function Sidebar() {
         <nav className="flex flex-col gap-1 px-4">
           {mainNavigation.map((item) => {
             const Icon = item.icon;
+            const isFavorites = item.href === '/favorites';
+
             return (
               <Link
                 key={item.name}
                 href={item.href}
                 className="flex items-center gap-3 rounded-lg px-3 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
               >
-                <Icon className="h-5 w-5" />
+                <Icon className="h-5 w-5 flex-shrink-0" />
                 <span className="text-base">{item.name}</span>
+                {isFavorites
+                  ? <span className="flex items-center justify-end w-full">
+                    <FavoritesCountBadge />
+                  </span>
+                  : null}
               </Link>
             );
           })}

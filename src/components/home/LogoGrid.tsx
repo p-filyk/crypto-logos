@@ -1,3 +1,5 @@
+import React from 'react';
+
 // components
 import { Skeleton } from '@/components/ui/skeleton';
 import LogoCard from './LogoCard';
@@ -12,11 +14,14 @@ interface Props {
   hasMore: boolean;
   onLoadMore: () => void;
   isLoading: boolean;
+  EmptyState?: React.ReactNode;
 }
 
-export default function LogoGrid({ logos, hasMore, onLoadMore, isLoading }: Props) {
+export default function LogoGrid({ logos, hasMore, onLoadMore, isLoading, EmptyState }: Props) {
   if (logos.length === 0 && !isLoading) {
-    return (
+    return EmptyState ? (
+      <>{EmptyState}</>
+    ) : (
       <div className="text-center py-12">
         <p className="text-lg text-muted-foreground">No logos found</p>
         <p className="text-sm text-muted-foreground mt-2">
@@ -48,11 +53,11 @@ export default function LogoGrid({ logos, hasMore, onLoadMore, isLoading }: Prop
       {/* Sentinel element for infinite scroll */}
       <ListSentinel hasMore={hasMore} onLoadMore={onLoadMore} isLoading={isLoading} />
 
-      {!hasMore && logos.length > 0 && (
-        <p className="text-center text-sm text-muted-foreground mt-4">
-          All logos loaded
-        </p>
-      )}
+      {/*{!hasMore && logos.length > 0 && (*/}
+      {/*  <p className="text-center text-sm text-muted-foreground mt-4">*/}
+      {/*    All logos loaded*/}
+      {/*  </p>*/}
+      {/*)}*/}
     </div>
   );
 }

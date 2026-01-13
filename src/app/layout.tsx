@@ -13,6 +13,7 @@ import { Toaster } from '@/components/ui/sonner';
 
 // styles
 import './globals.css';
+import { FavoritesProvider } from '@/providers/FavoritesProvider';
 
 // custom constants
 const geistSans = Geist({
@@ -48,12 +49,14 @@ export default function RootLayout({ children }: Props) {
       defaultTheme="system"
     >
       <QueryProvider>
-        <Header />
-        <Sidebar />
-        <main className="flex-1 flex flex-col pl-64">
-          {children}
-        </main>
-        <Toaster />
+        <FavoritesProvider>
+          <Header />
+          <Sidebar />
+          <main className="flex-1 flex flex-col pl-64">
+            {children}
+          </main>
+          <Toaster />
+        </FavoritesProvider>
       </QueryProvider>
     </ThemeProvider>
     </body>

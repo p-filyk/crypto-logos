@@ -2,7 +2,7 @@
 import { Heart } from 'lucide-react';
 
 // hooks
-import { useFavorites } from '@/hooks/use-favorites';
+import { useFavorites } from '@/providers/FavoritesProvider';
 
 // components
 import { Button } from '@/components/ui/button';
