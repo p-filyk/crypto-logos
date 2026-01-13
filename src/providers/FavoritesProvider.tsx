@@ -1,8 +1,7 @@
 'use client';
 
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useSyncExternalStore } from 'react';
 
-// personal models
 type FavoritesContextValue = {
   favorites: Set<string>;
   hydrated: boolean;
@@ -12,57 +11,102 @@ type FavoritesContextValue = {
   clearAll: () => void;
 };
 
-// personal constants
 const STORAGE_KEY = 'crypto-logos-favorites';
+const CHANGE_EVENT = 'crypto-logos-favorites:change';
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 
-function readFavorites(): Set<string> {
+function getClientSnapshot() {
+  if (typeof window === 'undefined') return null as string | null;
+  return window.localStorage.getItem(STORAGE_KEY);
+}
+
+function getServerSnapshot() {
+  return null as string | null;
+}
+
+function subscribe(onStoreChange: () => void) {
+  if (typeof window === 'undefined') {
+    return () => {
+    };
+  }
+
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === STORAGE_KEY) onStoreChange();
+  };
+
+  const onCustom = () => onStoreChange();
+
+  window.addEventListener('storage', onStorage);
+  window.addEventListener(CHANGE_EVENT, onCustom);
+
+  return () => {
+    window.removeEventListener('storage', onStorage);
+    window.removeEventListener(CHANGE_EVENT, onCustom);
+  };
+}
+
+function parseFavorites(raw: string | null) {
+  if (!raw) return [] as string[];
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return new Set();
-    const parsed = JSON.parse(stored);
-    if (!Array.isArray(parsed)) return new Set();
-    return new Set(parsed.filter((x): x is string => typeof x === 'string'));
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    const out: string[] = [];
+    const seen = new Set<string>();
+    for (const value of parsed) {
+      if (typeof value === 'string' && !seen.has(value)) {
+        seen.add(value);
+        out.push(value);
+      }
+    }
+    return out;
   } catch {
-    return new Set();
+    return [];
   }
 }
 
+function writeFavorites(ids: string[]) {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+function useHydrated() {
+  return useSyncExternalStore(
+    () => () => {
+    },
+    () => true,
+    () => false,
+  );
+}
+
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
-  const [favorites, setFavorites] = useState<Set<string>>(() => new Set());
-  const [hydrated, setHydrated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const raw = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
+  const hydrated = useHydrated();
+  const isLoading = !hydrated;
 
-  useEffect(() => {
-    setFavorites(readFavorites());
-    setHydrated(true);
-    setIsLoading(false);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...favorites]));
-  }, [favorites, hydrated]);
+  const ids = useMemo(() => parseFavorites(raw), [raw]);
+  const favorites = useMemo(() => new Set(ids), [ids]);
 
   const toggleFavorite = useCallback((id: string) => {
-    setFavorites((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    const current = new Set(parseFavorites(getClientSnapshot()));
+    if (current.has(id)) {
+      current.delete(id);
+    } else {
+      current.add(id);
+    }
+    writeFavorites([...current]);
   }, []);
 
   const clearAll = useCallback(() => {
-    setFavorites(new Set());
+    writeFavorites([]);
   }, []);
 
   const isFavorite = useCallback((id: string) => favorites.has(id), [favorites]);
 
   const value = useMemo(
     () => ({ favorites, hydrated, isLoading, toggleFavorite, isFavorite, clearAll }),
-    [favorites, hydrated, isLoading, toggleFavorite, isFavorite, clearAll]
+    [favorites, hydrated, isLoading, toggleFavorite, isFavorite, clearAll],
   );
 
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;
