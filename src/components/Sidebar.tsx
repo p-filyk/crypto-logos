@@ -1,11 +1,17 @@
 import Link from 'next/link';
 import { Home, Heart, Cloud, Code, Package } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // components
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CategoryList from '@/components/CategoryList';
 import FavoritesCountBadge from '@/components/FavoritesCountBadge';
+
+// custom models
+interface Props {
+  className?: string;
+}
 
 // custom constants
 const mainNavigation = [
@@ -16,9 +22,9 @@ const mainNavigation = [
   { name: 'Extensions', href: '/extensions', icon: Package },
 ];
 
-export async function Sidebar() {
+export default async function Sidebar({ className }: Props) {
   return (
-    <aside className="fixed left-0 top-14 z-40 flex flex-col h-[calc(100vh-3.5rem)] w-64 overflow-y-auto border-r border-border/40 bg-background overscroll-none">
+    <aside className={cn('fixed left-0 top-14 z-1000 flex flex-col h-[calc(100vh-3.5rem)] w-64 overflow-y-auto border-r border-border/40 bg-background overscroll-none', className)}>
       <div className="flex-1 flex flex-col gap-4 py-4">
         {/* Main Navigation */}
         <nav className="flex flex-col gap-1 px-4">

@@ -8,8 +8,8 @@ import QueryProvider from '@/providers/QueryProvider';
 import { FavoritesProvider } from '@/providers/FavoritesProvider';
 
 // components
-import { Header } from '@/components/Header';
-import { Sidebar } from '@/components/Sidebar';
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
 import { Toaster } from '@/components/ui/sonner';
 
 // styles
@@ -62,8 +62,8 @@ export default function RootLayout({ children }: Props) {
       <QueryProvider>
         <FavoritesProvider>
           <Header />
-          <Sidebar />
-          <main className="flex-1 flex flex-col pl-64">
+          <Sidebar className="max-md:hidden" />
+          <main className="flex-1 flex flex-col pl-64 max-md:pl-0">
             {children}
           </main>
           <Toaster />

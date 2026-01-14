@@ -33,7 +33,7 @@ export default function LogoGrid({ logos, hasMore, onLoadMore, isLoading, EmptyS
 
   return (
     <div className="py-4">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 px-3">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] gap-4 px-3">
         {logos.map((logo) => (
           <LogoCard
             key={logo.id}
