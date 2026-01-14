@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Home, Heart, Cloud, Code, Package } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -7,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CategoryList from '@/components/CategoryList';
 import FavoritesCountBadge from '@/components/FavoritesCountBadge';
+import NavLink from '@/components/NavLink';
 
 // custom models
 interface Props {
@@ -33,19 +33,18 @@ export default async function Sidebar({ className }: Props) {
             const isFavorites = item.href === '/favorites';
 
             return (
-              <Link
+              <NavLink
                 key={item.name}
+                name={item.name}
                 href={item.href}
-                className="flex items-center gap-3 rounded-lg px-3 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                icon={<Icon className="h-5 w-5 shrink-0" />}
               >
-                <Icon className="h-5 w-5 flex-shrink-0" />
-                <span className="text-base">{item.name}</span>
-                {isFavorites
-                  ? <span className="flex items-center justify-end w-full">
+                {isFavorites && (
+                  <span className="flex items-center justify-end w-full">
                     <FavoritesCountBadge />
                   </span>
-                  : null}
-              </Link>
+                )}
+              </NavLink>
             );
           })}
         </nav>
