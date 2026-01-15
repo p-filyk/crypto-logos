@@ -9,12 +9,8 @@ export const API_EXAMPLES = {
       "id": "bitcoin",
       "name": "Bitcoin",
       "mainCategory": "cryptocurrency",
-      "mainLogo": {
-        "url": "/logos/bitcoin.svg",
-        "format": "svg"
-      },
       "secondaryCategories": ["payment", "defi"],
-      "downloadableFiles": {
+      "logo": {
         "icon": {
           "light": [
             {
@@ -30,12 +26,8 @@ export const API_EXAMPLES = {
       "id": "ethereum",
       "name": "Ethereum",
       "mainCategory": "cryptocurrency",
-      "mainLogo": {
-        "url": "/logos/ethereum.svg",
-        "format": "svg"
-      },
       "secondaryCategories": ["blockchain", "defi"],
-      "downloadableFiles": {
+      "logo": {
         "icon": {
           "light": [
             {
@@ -66,12 +58,8 @@ export const API_EXAMPLES = {
       "id": "bitcoin",
       "name": "Bitcoin",
       "mainCategory": "cryptocurrency",
-      "mainLogo": {
-        "url": "/logos/bitcoin.svg",
-        "format": "svg"
-      },
       "secondaryCategories": ["payment", "defi"],
-      "downloadableFiles": {
+      "logo": {
         "icon": {
           "light": [
             {
@@ -97,12 +85,8 @@ export const API_EXAMPLES = {
       "id": "uniswap",
       "name": "Uniswap",
       "mainCategory": "defi",
-      "mainLogo": {
-        "url": "/logos/uniswap.svg",
-        "format": "svg"
-      },
       "secondaryCategories": ["cryptocurrency", "dex"],
-      "downloadableFiles": {
+      "logo": {
         "icon": {
           "light": [
             {
@@ -118,12 +102,8 @@ export const API_EXAMPLES = {
       "id": "aave",
       "name": "Aave",
       "mainCategory": "defi",
-      "mainLogo": {
-        "url": "/logos/aave.svg",
-        "format": "svg"
-      },
       "secondaryCategories": ["cryptocurrency", "lending"],
-      "downloadableFiles": {
+      "logo": {
         "icon": {
           "light": [
             {
@@ -148,12 +128,8 @@ export const API_EXAMPLES = {
       "id": "bitcoin",
       "name": "Bitcoin",
       "mainCategory": "cryptocurrency",
-      "mainLogo": {
-        "url": "/logos/bitcoin.svg",
-        "format": "svg"
-      },
       "secondaryCategories": ["payment", "defi"],
-      "downloadableFiles": {
+      "logo": {
         "icon": {
           "light": [
             {

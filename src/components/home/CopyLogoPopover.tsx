@@ -1,8 +1,9 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, MouseEvent } from 'react';
 import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTheme } from 'next-themes';
 
 // helpers
 import {
@@ -25,7 +26,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import ShadcnIcon from '@/components/icons/ShadcnIcon';
+// import ShadcnIcon from '@/components/icons/ShadcnIcon';
 import WebComponentIcon from '@/components/icons/WebComponentIcon';
 import ReactIcon from '@/components/icons/ReactIcon';
 import VueIcon from '@/components/icons/VueIcon';
@@ -35,16 +36,18 @@ import AstroIcon from '@/components/icons/AstroIcon';
 
 // models
 import type LogoItem from '@/shared/models/logos/logo-item';
+import LogoAsset from '@/shared/models/logos/logo-asset';
 
 // custom models
 interface CopyLogoPopoverProps {
   logo: LogoItem;
+  showWordmark: boolean;
   children: ReactNode;
 }
 
 enum Framework {
   Source = 'source',
-  Shadcn = 'shadcn',
+  // Shadcn = 'shadcn',
   WebComponent = 'web-component',
   React = 'react',
   Vue = 'vue',
@@ -57,7 +60,7 @@ enum Framework {
 const frameworks = [
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   { id: Framework.Source, label: 'Source', icon: ({ className }: { className?: string }) => 'Source' },
-  { id: Framework.Shadcn, label: 'shadcn/ui', icon: ShadcnIcon },
+  // { id: Framework.Shadcn, label: 'shadcn/ui', icon: ShadcnIcon },
   { id: Framework.WebComponent, label: 'Web Component', icon: WebComponentIcon },
   { id: Framework.React, label: 'React', icon: ReactIcon },
   { id: Framework.Vue, label: 'Vue', icon: VueIcon },
@@ -66,26 +69,53 @@ const frameworks = [
   { id: Framework.Astro, label: 'Astro', icon: AstroIcon },
 ] as const;
 
-export default function CopyLogoPopover({ logo, children }: CopyLogoPopoverProps) {
+export default function CopyLogoPopover({ logo, showWordmark, children }: CopyLogoPopoverProps) {
   // states
   const [selectedFramework, setSelectedFramework] = useState<Framework>(Framework.Source);
+  const [open, setOpen] = useState(false);
+  const { resolvedTheme } = useTheme();
 
   // computed
   const ActiveIcon = frameworks.find((framework) => framework.id === selectedFramework)?.icon;
+  const hasWordmark = Boolean(logo.logo.text?.light?.[0]);
+  const isDarkTheme = resolvedTheme === 'dark';
+  const currentAsset = getCurrentLogoAsset();
+  const isSvg = currentAsset.format === 'svg';
 
   // helpers
-  async function handleCopySVG(): Promise<void> {
+  // Get the current logo asset based on variant (icon/text) and theme (light/dark)
+  function getCurrentLogoAsset(): LogoAsset {
+    const variant = showWordmark && hasWordmark ? logo.logo.text : logo.logo.icon;
+    if (!variant) {
+      return logo.logo.icon.light[0];
+    }
+
+    // Try to get dark variant for a dark theme, fallback to light
+    if (isDarkTheme && variant.dark?.[0]) {
+      return variant.dark[0];
+    }
+    return variant.light[0];
+  }
+
+  function handleTriggerClick(e: MouseEvent): void {
+    e.preventDefault();
+    e.stopPropagation();
+    handleCopyImage();
+  }
+
+  // async helpers
+  async function handleCopyImage(): Promise<void> {
     try {
-      await copyLogoToClipboard(logo.mainLogo.url);
-      toast.success('SVG copied to clipboard!');
+      await copyLogoToClipboard(currentAsset.url);
+      toast.success(`${currentAsset.format.toUpperCase()} copied to clipboard!`);
     } catch {
-      toast.error('Failed to copy SVG');
+      toast.error('Failed to copy image');
     }
   }
 
   async function handleCopyTemplate(generator: (url: string, name: string) => Promise<string>, successMessage: string): Promise<void> {
     try {
-      const template = await generator(logo.mainLogo.url, logo.name);
+      const template = await generator(currentAsset.url, logo.name);
       await navigator.clipboard.writeText(template);
       toast.success(successMessage);
     } catch {
@@ -94,10 +124,15 @@ export default function CopyLogoPopover({ logo, children }: CopyLogoPopoverProps
   }
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        {children}
-      </PopoverTrigger>
+    <Popover open={open} onOpenChange={setOpen}>
+      {
+        isSvg ? <PopoverTrigger asChild>
+            {children}
+          </PopoverTrigger>
+          : <div onClick={handleTriggerClick}>
+            {children}
+          </div>
+      }
       <PopoverContent className="w-auto max-w-96 p-4 flex flex-col space-y-2" align="center">
         {/* Framework Selection */}
         <div className="flex items-center justify-center gap-1">
@@ -120,25 +155,25 @@ export default function CopyLogoPopover({ logo, children }: CopyLogoPopoverProps
         {/* Copy Button */}
         {selectedFramework === Framework.Source && (
           <Button
-            onClick={handleCopySVG}
+            onClick={handleCopyImage}
             className="w-full justify-start"
             variant="outline"
           >
             <Copy className="h-4 w-4 mr-2" />
-            Copy SVG
+            Copy {currentAsset.format.toUpperCase()}
           </Button>
         )}
 
-        {selectedFramework === Framework.Shadcn && (
-          <Button
-            onClick={handleCopySVG}
-            className="w-full justify-start"
-            variant="outline"
-          >
-            <Copy className="h-4 w-4 mr-2" />
-            Copy SVG
-          </Button>
-        )}
+        {/*{selectedFramework === Framework.Shadcn && (*/}
+        {/*  <Button*/}
+        {/*    onClick={handleCopyImage}*/}
+        {/*    className="w-full justify-start"*/}
+        {/*    variant="outline"*/}
+        {/*  >*/}
+        {/*    <Copy className="h-4 w-4 mr-2" />*/}
+        {/*    Copy {currentAsset.format.toUpperCase()}*/}
+        {/*  </Button>*/}
+        {/*)}*/}
 
         {selectedFramework === Framework.WebComponent && (
           <Button
@@ -239,7 +274,7 @@ export default function CopyLogoPopover({ logo, children }: CopyLogoPopoverProps
         {/* Disclaimer */}
         <div className="mt-1 flex w-full items-center text-center text-[12px] text-muted-foreground">
           <p>
-            Please ensure you have permission from the creators before using the SVG.
+            Please ensure you have permission from the creators before using the logo.
             Modifications are not permitted.
           </p>
         </div>

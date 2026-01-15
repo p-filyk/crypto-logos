@@ -37,8 +37,8 @@ npm run dev
 5. Add your SVG file (or use a direct SVG URL).  
 You have two options for providing the SVG:
 - Option A — Add the .svg file into the repository:  
-Put your file into: [**`public/images/library`**](https://github.com/zenobank/crypto-logos/tree/main/public/images/library).  
-Example: [**`public/images/library/logo.svg`**](https://github.com/zenobank/crypto-logos/tree/main/public/images/library).
+Put your file into: [**`public/library`**](https://github.com/zenobank/crypto-logos/tree/main/public/images/library).  
+Example: [**`public/library/logo.svg`**](https://github.com/zenobank/crypto-logos/tree/main/public/images/library).
 
 > [!WARNING]
 >
@@ -51,7 +51,7 @@ If you already host the SVG somewhere reliable (CDN / official source), you can 
 This is useful when you don’t want to commit the SVG file into the repo, but keep in mind external links can break later.
 
 6. Add logo metadata (follow the [**`LogoItem`**](https://github.com/zenobank/crypto-logos/tree/main/src/shared/models/logos/logo-item.ts) model).   
-Go to the [**`src/shared/constants/logos-data.ts`**](https://github.com/zenobank/crypto-logos/tree/main/src/shared/constants/logos-data.ts) and add the information about your logo, following the structure.   
+Go to the [**`src/api/logos.json`**](https://github.com/zenobank/crypto-logos/tree/main/src/shared/constants/logos-data.ts) and add the information about your logo, following the structure.   
 Every logo entry must follow the [**`LogoItem`**](https://github.com/zenobank/crypto-logos/tree/main/src/shared/models/logos/logo-item.ts) model, so the app can render it correctly and keep the library consistent.   
 
 - **Data model**:
@@ -62,10 +62,9 @@ interface LogoItem {
   name: string;
   mainCategory: string;
   secondaryCategories: string[];
+  logo: LogoDownloadableFiles;
   websiteLink?: string;
   brandKitLink?: string;
-  mainLogo: LogoAsset;
-  downloadableFiles: LogoDownloadableFiles;
 }
 
 interface LogoAsset {
@@ -85,19 +84,18 @@ interface LogoVariantGroup {
   dark?: LogoAsset[];
 }
 ```
-> [!NOTE] 
-> 
+> [!NOTE]
+>
 > - `id`: unique key (use lowercase, no spaces, usually the brand name).
 > - `name`: display name (example: `Stripe`).
 > - `mainCategory`: primary category (example: `fintech`).
 > - `secondaryCategories`: extra categories (example: `["payments", "billing"]`).
 > - `websiteLink`: (optional): official website.
 > - `brandKitLink`: (optional): brand guidelines / press kit.
-> - `mainLogo`: the “main” logo (usually one SVG).
-> - `downloadableFiles`: files users can download:  
-> &nbsp;&nbsp;`icon`: required.  
-> &nbsp;&nbsp;`text`: optional (text logo).  
-> &nbsp;&nbsp; each supports `light` and optionally `dark`.  
+> - `logo`: logo files users can download:
+> &nbsp;&nbsp;`icon`: required.
+> &nbsp;&nbsp;`text`: optional (text logo).
+> &nbsp;&nbsp; each supports `light` and optionally `dark`.
 > &nbsp;&nbsp; each variant is an array so you can provide multiple assets (formats/sizes) if needed.
 
 - **Simple logo (one icon, light only)**:
@@ -108,8 +106,7 @@ interface LogoVariantGroup {
   name: 'Title',
   mainCategory: 'Main category',
   secondaryCategories: ['Secondary categories'],
-  mainLogo: { url: 'https://example.com/main.svg', format: 'svg' },
-  downloadableFiles: {
+  logo: {
     icon: {
       light: [{ url: 'https://example.com/icon-light.svg', format: 'svg' }]
     }
@@ -125,8 +122,7 @@ interface LogoVariantGroup {
   name: 'Title',
   mainCategory: 'Main category',
   secondaryCategories: ['Secondary categories'],
-  mainLogo: { url: 'https://example.com/main.svg', format: 'svg' },
-  downloadableFiles: {
+  logo: {
     icon: {
       light: [{ url: 'https://example.com/icon-light.svg', format: 'svg' }],
       dark: [{ url: 'https://example.com/icon-dark.svg', format: 'svg' }]
@@ -143,10 +139,9 @@ interface LogoVariantGroup {
   name: 'Title',
   mainCategory: 'Main category',
   secondaryCategories: ['Secondary categories'],
-  mainLogo: { url: 'https://example.com/main.svg', format: 'svg' },
   websiteLink: 'https://example.com',
   brandKitLink: 'https://example.com/brand',
-  downloadableFiles: {
+  logo: {
     icon: {
       light: [{ url: 'https://example.com/icon-light.svg', format: 'svg' }],
       dark: [{ url: 'https://example.com/icon-dark.svg', format: 'svg' }]
@@ -167,13 +162,12 @@ interface LogoVariantGroup {
   name: 'Title',
   mainCategory: 'Main category',
   secondaryCategories: ['Secondary categories'],
-  mainLogo: { url: 'https://example.com/main.svg', format: 'svg' },
   websiteLink: 'https://example.com',
   brandKitLink: 'https://example.com/brand',
-  downloadableFiles: {
-  icon: {
-    light: [{ url: 'https://example.com/icon-light.svg', format: 'svg' }],
-    dark: [{ url: 'https://example.com/icon-dark.svg', format: 'svg' }]
+  logo: {
+    icon: {
+      light: [{ url: 'https://example.com/icon-light.svg', format: 'svg' }],
+      dark: [{ url: 'https://example.com/icon-dark.svg', format: 'svg' }]
     },
     text: {
       light: [{ url: 'https://example.com/text-icon-light.svg', format: 'svg' }],
