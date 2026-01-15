@@ -42,9 +42,7 @@ export default async function FavoritesPage({
   const { q: searchQuery = '' } = await searchParams;
 
   // prefetch
-  await queryClient.prefetchInfiniteQuery(
-    getLogosQueryParams(searchQuery, null),
-  );
+  await queryClient.prefetchInfiniteQuery(getLogosQueryParams(searchQuery, null));
 
   return (
     <div className="flex-1 flex flex-col p-6 max-md:p-4">

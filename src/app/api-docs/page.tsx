@@ -23,6 +23,11 @@ const typescriptTypes = `type LogoFileFormat = 'svg'
  | 'jpg'
  | 'webp'
  | 'unknown';
+ 
+enum LogosSortBy {
+  NameAsc = 'name-asc',
+  NameDesc = 'name-desc',
+}
 
 interface LogoAsset {
   url: string;
@@ -119,6 +124,12 @@ export default function ApiDocsPage() {
                             type: 'string',
                             description:
                               'Search logos by name (case-insensitive substring match).',
+                          },
+                          {
+                            name: 'sortBy',
+                            type: 'LogosSortBy',
+                            description:
+                              'Sort logos by name in ascending or descending order. Default is \'name-asc\'.',
                           },
                           {
                             name: 'limit',

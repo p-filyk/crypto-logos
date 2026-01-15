@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 // queries
@@ -28,20 +27,10 @@ export default function InfiniteScrollWrapper({ searchQuery, category, sortBy }:
     isFetchingNextPage,
     isLoading,
     error,
-  } = useInfiniteQuery(getLogosQueryParams(searchQuery, category));
+  } = useInfiniteQuery(getLogosQueryParams(searchQuery, category, sortBy));
 
   // computed
-  const logos = useMemo(() => {
-    if (!data) {
-      return [];
-    }
-
-    return data.pages
-      .flatMap((page) => page.data)
-      .toSorted(
-        (a, b) => sortBy === LogosSortBy.NameAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
-      );
-  }, [data, sortBy]);
+  const logos = (data || { pages: [] }).pages.flatMap((page) => page.data);
 
   if (error) {
     return (

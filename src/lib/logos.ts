@@ -1,13 +1,14 @@
 // data
-import LOGOS_DATA from "@/shared/constants/logos-data";
+import LOGOS_DATA from '@/shared/constants/logos-data';
 
 // helpers
-import normalizeString from "@/shared/helpers/normalize-string";
-import clamp from "@/shared/helpers/clamp";
+import normalizeString from '@/shared/helpers/normalize-string';
+import clamp from '@/shared/helpers/clamp';
 
 // models
-import type LogoItem from "@/shared/models/logos/logo-item";
-import type ListResponse from "@/shared/models/common/list-response";
+import LogoItem from '@/shared/models/logos/logo-item';
+import ListResponse from '@/shared/models/common/list-response';
+import LogosSortBy from '@/shared/models/logos/logos-sort-by';
 
 // custom models
 export interface GetLogosParams {
@@ -15,6 +16,7 @@ export interface GetLogosParams {
   skip?: number;
   category?: string;
   search?: string;
+  sortBy?: LogosSortBy;
 }
 
 type PreparedLogo = {
@@ -30,7 +32,7 @@ const preparedLogos: PreparedLogo[] = LOGOS_DATA.map((logo) => ({
 }));
 
 export async function getLogos(params: GetLogosParams = {}): Promise<ListResponse<LogoItem>> {
-  const { category, search, limit, skip = 0 } = params;
+  const { category, search, limit, skip = 0, sortBy = LogosSortBy.NameAsc } = params;
 
   const categoryKey = category ? normalizeString(category) : null;
   const searchKey = search ? normalizeString(search) : null;
@@ -40,17 +42,24 @@ export async function getLogos(params: GetLogosParams = {}): Promise<ListRespons
     return !(searchKey && !item.searchText.includes(searchKey));
   });
 
-  const total = filtered.length;
+  // Sort the filtered results
+  const sorted = filtered.toSorted((a, b) => {
+    return sortBy === LogosSortBy.NameAsc
+      ? a.logo.name.localeCompare(b.logo.name)
+      : b.logo.name.localeCompare(a.logo.name);
+  });
+
+  const total = sorted.length;
 
   // If no pagination params, return all
   if (limit === undefined) {
-    return { data: filtered.map((x) => x.logo), total };
+    return { data: sorted.map((x) => x.logo), total };
   }
 
   const start = clamp(skip, 0, total);
   const end = clamp(start + limit, 0, total);
 
-  const data = filtered.slice(start, end).map((x) => x.logo);
+  const data = sorted.slice(start, end).map((x) => x.logo);
 
   return { data, total };
 }

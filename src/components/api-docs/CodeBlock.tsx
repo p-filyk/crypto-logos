@@ -15,8 +15,8 @@ interface CodeBlockProps {
 }
 
 export default function CodeBlock({ code, language, title }: CodeBlockProps) {
-  const { theme } = useTheme();
-  const syntaxTheme = theme === 'dark' ? oneDark : oneLight;
+  const { resolvedTheme } = useTheme();
+  const syntaxTheme = resolvedTheme === 'dark' ? oneDark : oneLight;
 
   return (
     <div className="relative group">

@@ -54,7 +54,7 @@ export default async function Home({
 
   // prefetch
   await queryClient.prefetchInfiniteQuery(
-    getLogosQueryParams(searchQuery, category),
+    getLogosQueryParams(searchQuery, category, sortBy),
   );
 
   return (

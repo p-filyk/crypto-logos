@@ -66,7 +66,7 @@ export default async function CategoryPage({
 
   // prefetch
   await queryClient.prefetchInfiniteQuery(
-    getLogosQueryParams(searchQuery, category),
+    getLogosQueryParams(searchQuery, category, sortBy),
   );
 
   return (
