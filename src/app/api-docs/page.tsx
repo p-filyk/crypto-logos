@@ -48,9 +48,8 @@ interface LogoItem {
   id: string;
   name: string;
   mainCategory: string;
-  mainLogo: LogoAsset;
   secondaryCategories: string[];
-  downloadableFiles: LogoDownloadableFiles;
+  logo: LogoDownloadableFiles;
   websiteLink?: string;
   brandKitLink?: string;
 }
@@ -213,7 +212,7 @@ export default function ApiDocsPage() {
                         </li>
                         <li>
                           Some logos include wordmark/text variants in the
-                          downloadableFiles field
+                          logo field
                         </li>
                       </ul>
                     </div>

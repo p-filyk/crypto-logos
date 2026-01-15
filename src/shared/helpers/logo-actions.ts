@@ -1,8 +1,26 @@
 export async function copyLogoToClipboard(logoUrl: string): Promise<void> {
   try {
-    const response = await fetch(logoUrl);
-    const logoContent = await response.text();
-    await navigator.clipboard.writeText(logoContent);
+    // Determine file type from URL
+    const fileExtension = logoUrl.split('.').pop()?.toLowerCase();
+    const isSvg = fileExtension === 'svg';
+
+    if (isSvg) {
+      // For SVG, copy as text
+      const response = await fetch(logoUrl);
+      const logoContent = await response.text();
+      await navigator.clipboard.writeText(logoContent);
+    } else {
+      // For PNG/JPG/WEBP, copy as image blob
+      const response = await fetch(logoUrl);
+      const blob = await response.blob();
+
+      // Create ClipboardItem with the image blob
+      const clipboardItem = new ClipboardItem({
+        [blob.type]: blob
+      });
+
+      await navigator.clipboard.write([clipboardItem]);
+    }
   } catch (error) {
     console.error('Failed to copy logo:', error);
     throw error;

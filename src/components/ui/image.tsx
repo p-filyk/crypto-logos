@@ -1,11 +1,12 @@
 'use client';
 
-import { ImgHTMLAttributes, useState } from 'react';
+import { useState } from 'react';
+import NextImage, { ImageProps as NextImageProps } from 'next/image';
 import { cn } from '@/lib/utils';
 import { Skeleton } from './skeleton';
 
 // custom models
-interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
+interface ImageProps extends Omit<NextImageProps, 'onLoad' | 'onError'> {
   src: string;
   alt: string;
   fallbackText?: string;
@@ -14,6 +15,8 @@ interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 export function Image({
   src,
   alt,
+  width,
+  height,
   fallbackText,
   className,
   ...props
@@ -36,15 +39,16 @@ export function Image({
   }
 
   return (
-    <div className={cn('relative flex items-center justify-center z-0', className)}>
-      {loading && <Skeleton className="absolute inset-0 z-[-1]" />}
+    <div className={cn('relative flex items-center justify-center', className)}>
+      {loading && <Skeleton className="absolute inset-0" />}
 
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <NextImage
         {...props}
         src={src}
         alt={alt}
-        className="w-full h-full object-cover"
+        width={width}
+        height={height}
+        className={cn('w-full h-full object-cover', loading && 'opacity-0')}
         onLoad={() => setLoading(false)}
         onError={() => {
           setLoading(false);

@@ -1,5 +1,5 @@
 // data
-import LOGOS_DATA from '@/shared/constants/logos-data';
+import LOGOS_DATA_RAW from '@/api/logos.json';
 
 // helpers
 import normalizeString from '@/shared/helpers/normalize-string';
@@ -9,6 +9,9 @@ import clamp from '@/shared/helpers/clamp';
 import LogoItem from '@/shared/models/logos/logo-item';
 import ListResponse from '@/shared/models/common/list-response';
 import LogosSortBy from '@/shared/models/logos/logos-sort-by';
+
+// Type-cast the imported JSON to the correct type
+const LOGOS_DATA = LOGOS_DATA_RAW as unknown as LogoItem[];
 
 // custom models
 export interface GetLogosParams {

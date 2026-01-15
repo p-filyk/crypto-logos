@@ -1,5 +1,5 @@
 // data
-import LOGOS_DATA from '@/shared/constants/logos-data';
+import LOGOS_DATA from '@/api/logos.json';
 
 // helpers
 import normalizeString from '@/shared/helpers/normalize-string';

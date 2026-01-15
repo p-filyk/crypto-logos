@@ -1,4 +1,5 @@
 [
+<<<<<<< HEAD
    {
       "id":"casinocoin",
       "name":"CasinoCoin",
@@ -1800,3 +1801,242 @@
       }
    }
 ]
+=======
+  {
+    "id": "casinocoin",
+    "name": "CasinoCoin",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_casinocoin.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "gamecredits",
+    "name": "GameCredits",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_gamecredits.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "circuits-of-value",
+    "name": "Circuits of Value",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_circuits-of-value.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "tether",
+    "name": "Tether USDt",
+    "mainCategory": "stablecoins",
+    "secondaryCategories": [
+      "tokens"
+    ],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_tether.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "agoras-tokens",
+    "name": "Agoras: Tau Net",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_agoras-tokens.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "augur",
+    "name": "Augur",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_augur.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "pluton",
+    "name": "Pluton",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_pluton.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "golem-network-tokens",
+    "name": "Golem",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_golem-network-tokens.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "wings",
+    "name": "Wings",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_wings.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "maker",
+    "name": "Maker",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_maker.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "enzyme",
+    "name": "Enzyme",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_enzyme.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "chrono-tech",
+    "name": "Chrono.tech",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_chrono-tech.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "swarm-city",
+    "name": "Swarm City",
+    "mainCategory": "tokens",
+    "secondaryCategories": [],
+    "websiteLink": null,
+    "brandKitLink": null,
+    "logo": {
+      "icon": {
+        "light": [
+          {
+            "url": "/library/icon_light_swarm-city.png",
+            "format": "png"
+          }
+        ]
+      }
+    }
+  }
+]
+>>>>>>> 6bc1025f73fb3ea6667089f41f2973b2ccbea52b

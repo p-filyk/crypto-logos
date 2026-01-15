@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-import { Download } from 'lucide-react';
+import { ReactNode, MouseEvent } from 'react';
 
 // helpers
 import { downloadLogo } from '@/shared/helpers/logo-actions';
@@ -10,15 +9,12 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle, DialogTrigger,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Image } from '@/components/ui/image';
+import DownloadSection from '@/components/home/DownloadSection';
 
 // models
 import type LogoItem from '@/shared/models/logos/logo-item';
-import type LogoAsset from '@/shared/models/logos/logo-asset';
 
 // custom models
 interface DownloadLogoDialogProps {
@@ -26,105 +22,34 @@ interface DownloadLogoDialogProps {
   children: ReactNode;
 }
 
-interface DownloadSectionProps {
-  title: string;
-  previewUrl: string;
-  logoName: string;
-  lightAssets: LogoAsset[];
-  darkAssets?: LogoAsset[];
-  filePrefix: string;
-}
-
-function DownloadSection({
-  title,
-  previewUrl,
-  logoName,
-  lightAssets,
-  darkAssets,
-  filePrefix,
-}: DownloadSectionProps) {
-  // computed
-  const hasBothVariants = lightAssets.length > 0 && darkAssets && darkAssets.length > 0;
-  const lightAsset = lightAssets[0];
-  const darkAsset = darkAssets?.[0];
-
-  // helpers
-  function handleDownloadVariant(asset: LogoAsset, variantName: string): void {
-    downloadLogo(asset.url, `${logoName}-${filePrefix}-${variantName}.${asset.format}`);
-  }
-
-  function handleDownloadBoth(): void {
-    if (lightAsset) {
-      downloadLogo(lightAsset.url, `${logoName}-${filePrefix}-light.${lightAsset.format}`);
-    }
-    if (darkAsset) {
-      setTimeout(() => {
-        downloadLogo(darkAsset.url, `${logoName}-${filePrefix}-dark.${darkAsset.format}`);
-      }, 100);
-    }
-  }
-
-  return (
-    <div className="flex flex-col items-center gap-4 p-4 border rounded-lg bg-card">
-      <Image
-        className="h-16 w-auto"
-        src={previewUrl}
-        alt={title}
-        height={64}
-        fallbackText={title}
-      />
-
-      <div className="flex flex-col gap-2 w-full">
-        {hasBothVariants && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleDownloadBoth}
-            className="w-full justify-start"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Light & dark variants
-            <span className="ml-auto text-xs text-muted-foreground">.zip</span>
-          </Button>
-        )}
-
-        {lightAsset && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleDownloadVariant(lightAsset, 'light')}
-            className="w-full justify-start"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            {hasBothVariants ? 'Only light variant' : 'Light variant'}
-            <span className="ml-auto text-xs text-muted-foreground">.{lightAsset.format}</span>
-          </Button>
-        )}
-
-        {darkAsset && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleDownloadVariant(darkAsset, 'dark')}
-            className="w-full justify-start"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            {hasBothVariants ? 'Only dark variant' : 'Dark variant'}
-            <span className="ml-auto text-xs text-muted-foreground">.{darkAsset.format}</span>
-          </Button>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export default function DownloadLogoDialog({ logo, children }: DownloadLogoDialogProps) {
   // computed
-  const hasWordmark = Boolean(logo.downloadableFiles.text?.light?.[0]);
+  const hasWordmark = Boolean(logo.logo.text?.light?.[0]);
+  const hasDarkIcon = Boolean(logo.logo.icon.dark?.[0]);
+
+  // Check if there's only one image: icon.light only, no dark, no text
+  const hasOnlyOneImage = !hasDarkIcon && !hasWordmark;
+
+  // helpers
+  function handleDownload(e: MouseEvent): void {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const asset = logo.logo.icon.light[0];
+    if (asset) {
+      downloadLogo(asset.url, `${logo.id}-icon-light.${asset.format}`);
+    }
+  }
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      {
+        hasOnlyOneImage ?
+        <div onClick={handleDownload}>
+          {children}
+        </div>
+        : <DialogTrigger asChild>{children}</DialogTrigger>
+      }
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>Download {logo.name} SVGs</DialogTitle>
@@ -136,20 +61,20 @@ export default function DownloadLogoDialog({ logo, children }: DownloadLogoDialo
         <div className={`grid gap-4 ${hasWordmark ? 'grid-cols-2' : 'grid-cols-1 max-w-sm mx-auto'}`}>
           <DownloadSection
             title="Icon only"
-            previewUrl={logo.downloadableFiles.icon.light[0]?.url || logo.mainLogo.url}
+            previewUrl={logo.logo.icon.light[0]?.url}
             logoName={logo.id}
-            lightAssets={logo.downloadableFiles.icon.light}
-            darkAssets={logo.downloadableFiles.icon.dark}
+            lightAssets={logo.logo.icon.light}
+            darkAssets={logo.logo.icon.dark}
             filePrefix="icon"
           />
 
-          {hasWordmark && logo.downloadableFiles.text && (
+          {hasWordmark && logo.logo.text && (
             <DownloadSection
               title="With wordmark"
-              previewUrl={logo.downloadableFiles.text.light[0].url}
+              previewUrl={logo.logo.text.light[0].url}
               logoName={logo.id}
-              lightAssets={logo.downloadableFiles.text.light}
-              darkAssets={logo.downloadableFiles.text.dark}
+              lightAssets={logo.logo.text.light}
+              darkAssets={logo.logo.text.dark}
               filePrefix="wordmark"
             />
           )}
