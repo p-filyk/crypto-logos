@@ -41,7 +41,7 @@
         ],
         "dark": [
           {
-            "url": "/library/icon_light_casinocoin.png",
+            "url": "/library/icon_ligh1t_casinocoin.png",
             "format": "png"
           }
         ]
@@ -931,7 +931,9 @@
           }
         ]
       }
-    }
+    },
+    "websiteLink": "https://chain.link",
+    "brandKitLink": "https://chain.link/brand-assets "
   },
   {
     "id": "substratum",
@@ -1135,7 +1137,8 @@
           }
         ]
       }
-    }
+    },
+    "websiteLink": "https://www.kucoin.com"
   },
   {
     "id": "latoken",

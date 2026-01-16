@@ -7,18 +7,19 @@ export async function copyLogoToClipboard(logoUrl: string): Promise<void> {
     const isSvg = fileExtension === 'svg';
 
     if (isSvg) {
-      // For SVG, copy as text
       const response = await fetch(logoUrl);
       const logoContent = await response.text();
       await navigator.clipboard.writeText(logoContent);
     } else {
-      // For PNG/JPG/WEBP, copy as image blob
-      const response = await fetch(logoUrl);
-      const blob = await response.blob();
+      const mimeType = `image/${(fileExtension || 'png')?.replace('jpg', 'jpeg')}`; // default
 
-      // Create a ClipboardItem with the image blob
+      async function getBlobPromise(): Promise<Blob> {
+        const response = await fetch(logoUrl);
+        return await response.blob();
+      }
+
       const clipboardItem = new ClipboardItem({
-        [blob.type]: blob
+        [mimeType]: getBlobPromise(),
       });
 
       await navigator.clipboard.write([clipboardItem]);
@@ -40,7 +41,7 @@ export function downloadLogo(logoUrl: string, fileName: string): void {
 
 export async function downloadAssetsAsZip(
   assets: Array<{ url: string; fileName: string }>,
-  zipFileName: string
+  zipFileName: string,
 ): Promise<void> {
   try {
     // Fetch all assets and prepare files for zipping
@@ -49,7 +50,7 @@ export async function downloadAssetsAsZip(
         const response = await fetch(url);
         const blob = await response.blob();
         return { name: fileName, input: blob };
-      })
+      }),
     );
 
     // Create and download the zip file
@@ -98,7 +99,7 @@ function toPascalCase(str: string): string {
 
 export async function generateWebComponentTemplate(
   logoUrl: string,
-  logoName: string
+  logoName: string,
 ): Promise<string> {
   const svgContent = await fetchSVGContent(logoUrl);
   const svgAttributes = extractSVGAttributes(svgContent);
@@ -130,7 +131,7 @@ customElements.define("icon-${componentName}", Icon${toPascalCase(logoName)});`;
 
 export async function generateReactTSXTemplate(
   logoUrl: string,
-  logoName: string
+  logoName: string,
 ): Promise<string> {
   const svgContent = await fetchSVGContent(logoUrl);
   const svgAttributes = extractSVGAttributes(svgContent);
@@ -156,7 +157,7 @@ export default function ${componentName}Icon({
 
 export async function generateReactJSXTemplate(
   logoUrl: string,
-  logoName: string
+  logoName: string,
 ): Promise<string> {
   const svgContent = await fetchSVGContent(logoUrl);
   const svgAttributes = extractSVGAttributes(svgContent);
@@ -254,7 +255,7 @@ export async function generateSvelteJSTemplate(logoUrl: string): Promise<string>
 
 export async function generateAngularTemplate(
   logoUrl: string,
-  logoName: string
+  logoName: string,
 ): Promise<string> {
   const svgContent = await fetchSVGContent(logoUrl);
   const svgAttributes = extractSVGAttributes(svgContent);

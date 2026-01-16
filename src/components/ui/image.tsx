@@ -84,7 +84,7 @@ export function Image({
         loading="eager"
         fetchPriority="high"
         quality={75}
-        className={cn('w-full h-full object-cover', loading && 'opacity-0')}
+        className={cn('h-full object-contain', loading && 'opacity-0')}
         onLoad={handleLoad}
         onError={handleError}
       />
