@@ -1,6 +1,8 @@
+import { downloadZip } from 'client-zip';
+
 export async function copyLogoToClipboard(logoUrl: string): Promise<void> {
   try {
-    // Determine file type from URL
+    // Determine a file type from URL
     const fileExtension = logoUrl.split('.').pop()?.toLowerCase();
     const isSvg = fileExtension === 'svg';
 
@@ -14,7 +16,7 @@ export async function copyLogoToClipboard(logoUrl: string): Promise<void> {
       const response = await fetch(logoUrl);
       const blob = await response.blob();
 
-      // Create ClipboardItem with the image blob
+      // Create a ClipboardItem with the image blob
       const clipboardItem = new ClipboardItem({
         [blob.type]: blob
       });
@@ -34,6 +36,39 @@ export function downloadLogo(logoUrl: string, fileName: string): void {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+export async function downloadAssetsAsZip(
+  assets: Array<{ url: string; fileName: string }>,
+  zipFileName: string
+): Promise<void> {
+  try {
+    // Fetch all assets and prepare files for zipping
+    const files = await Promise.all(
+      assets.map(async ({ url, fileName }) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return { name: fileName, input: blob };
+      })
+    );
+
+    // Create and download the zip file
+    const zipBlob = await downloadZip(files).blob();
+
+    // Download the zip file
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(zipBlob);
+    link.download = zipFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Clean up the object URL
+    URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error('Failed to create zip file:', error);
+    throw error;
+  }
 }
 
 async function fetchSVGContent(logoUrl: string): Promise<string> {

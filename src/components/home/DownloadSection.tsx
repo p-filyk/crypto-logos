@@ -1,7 +1,7 @@
 import { Download } from 'lucide-react';
 
 // helpers
-import { downloadLogo } from '@/shared/helpers/logo-actions';
+import { downloadLogo, downloadAssetsAsZip } from '@/shared/helpers/logo-actions';
 
 // components
 import { Button } from '@/components/ui/button';
@@ -32,21 +32,31 @@ export default function DownloadSection({
   const hasBothVariants = lightAssets.length > 0 && darkAssets && darkAssets.length > 0;
   const lightAsset = lightAssets[0];
   const darkAsset = darkAssets?.[0];
+  const alternativeSrcs = [...lightAssets, ...(darkAssets || [])].map(el => el.url);
 
   // helpers
   function handleDownloadVariant(asset: LogoAsset, variantName: string): void {
     downloadLogo(asset.url, `${logoName}-${filePrefix}-${variantName}.${asset.format}`);
   }
 
-  function handleDownloadBoth(): void {
+  async function handleDownloadBoth(): Promise<void> {
+    const assets = [];
+
     if (lightAsset) {
-      downloadLogo(lightAsset.url, `${logoName}-${filePrefix}-light.${lightAsset.format}`);
+      assets.push({
+        url: lightAsset.url,
+        fileName: `${logoName}-${filePrefix}-light.${lightAsset.format}`,
+      });
     }
+
     if (darkAsset) {
-      setTimeout(() => {
-        downloadLogo(darkAsset.url, `${logoName}-${filePrefix}-dark.${darkAsset.format}`);
-      }, 100);
+      assets.push({
+        url: darkAsset.url,
+        fileName: `${logoName}-${filePrefix}-dark.${darkAsset.format}`,
+      });
     }
+
+    await downloadAssetsAsZip(assets, `${logoName}-${filePrefix}.zip`);
   }
 
   return (
@@ -55,6 +65,7 @@ export default function DownloadSection({
         className="h-16 w-auto"
         src={previewUrl}
         alt={title}
+        alternativeSrcs={alternativeSrcs}
         height={240}
         width={240}
         fallbackText={title}

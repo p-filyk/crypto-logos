@@ -42,8 +42,8 @@ export default function LogosSection({ searchQuery, category, sortBy, showCatego
                   <LogosCountBadge
                     searchQuery={searchQuery}
                     category={category}
+                    categoryPage={showCategoryHeader}
                   />
-                  {showCategoryHeader ? ' SVGs' : ' logos'}
                 </span>
               </span>
             </div>

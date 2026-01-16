@@ -70,11 +70,11 @@ export default function LogosSection({ searchQuery }: Props) {
 
       <Card className="flex-1 flex flex-col p-0 gap-0 overflow-hidden bg-transparent">
         <ScrollArea className="grow flex flex-col h-0">
-          <div className="sticky top-0 z-50 flex h-12.5 items-center justify-between py-1.5 pr-2 pl-3 border-b border-neutral-200 dark:border-neutral-800 bg-white/80 backdrop-blur-sm dark:bg-neutral-900/40">
+          <div className="sticky top-0 z-10 flex h-12.5 items-center justify-between py-1.5 pr-2 pl-3 border-b border-neutral-200 dark:border-neutral-800 bg-white/80 backdrop-blur-sm dark:bg-neutral-900/40">
             <div className="flex items-center gap-2">
               <Folder className="h-5 w-5" />
               <span className="text-lg">
-                Favorites<span className="hidden md:inline"> - {favorites.size} SVGs</span>
+                Favorites<span className="hidden md:inline"> - {favorites.size} SVG{favorites.size === 1 ? '' : 's'}</span>
               </span>
             </div>
 
