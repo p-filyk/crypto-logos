@@ -47,7 +47,7 @@ export default function InfiniteScrollWrapper({ searchQuery, category, sortBy }:
   }
 
   return (
-    <ScrollArea className="grow h-0 py-4" viewportRef={scrollContainerRef}>
+    <ScrollArea className="grow flex flex-col h-0 py-4" viewportRef={scrollContainerRef}>
       <LogoGrid
         logos={logos}
         hasMore={hasNextPage}
