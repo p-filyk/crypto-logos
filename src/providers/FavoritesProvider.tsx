@@ -1,8 +1,11 @@
 'use client';
 
 import React, { createContext, useCallback, useContext, useMemo, useSyncExternalStore } from 'react';
+
+// models
 import LogoItem from '@/shared/models/logos/logo-item';
 
+// personal interface
 type FavoritesContextValue = {
   favoriteItems: LogoItem[];
   hydrated: boolean;
@@ -12,6 +15,7 @@ type FavoritesContextValue = {
   clearAll: () => void;
 };
 
+// personal constants
 const STORAGE_KEY = 'crypto-logos-favorites';
 const CHANGE_EVENT = 'crypto-logos-favorites:change';
 
@@ -56,8 +60,8 @@ function parseFavoriteItems(raw: string | null) {
     for (const value of parsed) {
       if (!value || typeof value !== 'object') continue;
 
-      const id = (value as any).id;
-      if (typeof id !== 'string' || !id) continue;
+      const id = (value as LogoItem).id;
+      if (!id) continue;
 
       if (seen.has(id)) continue;
       seen.add(id);
@@ -93,11 +97,11 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const favoriteItems = useMemo(() => parseFavoriteItems(raw), [raw]);
 
   const toggleFavorite = useCallback((logo: LogoItem) => {
-    const id = (logo as any).id as string | undefined;
+    const id = (logo as LogoItem).id as string | undefined;
     if (!id) return;
 
     const current = parseFavoriteItems(getClientSnapshot());
-    const index = current.findIndex((x: any) => x.id === id);
+    const index = current.findIndex((x: LogoItem) => x.id === id);
 
     if (index >= 0) {
       current.splice(index, 1);
@@ -114,9 +118,9 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
 
   const isFavorite = useCallback(
     (logo: LogoItem) => {
-      const id = (logo as any).id as string | undefined;
+      const id = (logo as LogoItem).id as string | undefined;
       if (!id) return false;
-      return favoriteItems.some((x: any) => x.id === id);
+      return favoriteItems.some((x: LogoItem) => x.id === id);
     },
     [favoriteItems],
   );

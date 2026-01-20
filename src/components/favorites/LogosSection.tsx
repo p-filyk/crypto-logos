@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Folder, Trash } from 'lucide-react';
 
 // models
@@ -25,30 +25,44 @@ interface Props {
 type LogoItemLike = LogoItem & { id?: string | number; name?: string };
 
 export default function LogosSection({ searchQuery }: Props) {
+  // common
   const { favoriteItems, hydrated, clearAll, isLoading: isLoadingFavorites } = useFavorites();
   const { scrollContainerRef } = useScrollReset([searchQuery]);
 
-  const cacheRef = useRef<Map<string, LogoItem>>(new Map());
+  // states
+  const [visibleItems, setVisibleItems] = useState<LogoItem[]>([]);
 
-  const logos = useMemo(() => {
-    for (const item of favoriteItems) {
-      const id = String((item as LogoItemLike).id ?? '');
-      if (!id) continue;
-      if (!cacheRef.current.has(id)) {
-        cacheRef.current.set(id, item);
+  // watchers
+  useEffect(() => {
+    setVisibleItems((prev) => {
+      const map = new Map<string, LogoItem>();
+
+      for (const item of prev) {
+        const id = String((item as LogoItemLike).id ?? '');
+        if (id) map.set(id, item);
       }
-    }
 
-    const list = Array.from(cacheRef.current.values());
+      for (const item of favoriteItems) {
+        const id = String((item as LogoItemLike).id ?? '');
+        if (id && !map.has(id)) {
+          map.set(id, item);
+        }
+      }
 
+      return Array.from(map.values());
+    });
+  }, [favoriteItems]);
+
+  // computed
+  const logos = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return list;
+    if (!q) return visibleItems;
 
-    return list.filter((logo) => {
+    return visibleItems.filter((logo) => {
       const name = String((logo as LogoItemLike).name ?? '').toLowerCase();
       return name.includes(q);
     });
-  }, [favoriteItems, searchQuery]);
+  }, [visibleItems, searchQuery]);
 
   const isLoading = isLoadingFavorites || !hydrated;
   const count = favoriteItems.length;
