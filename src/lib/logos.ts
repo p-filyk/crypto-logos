@@ -18,45 +18,41 @@ export interface GetLogosParams {
   sortBy?: LogosSortBy;
 }
 
+function getResults(search?: string, category?: string): LogoItemsResponse[] {
+  if (!search && !category) {
+    return LOGOS_RESPONSE;
+  }
+
+  if (!search) {
+    return LOGOS_BY_CATEGORY[category!] ?? [];
+  }
+
+  const categoryData = category ? CATEGORY_SEARCH_INDEXES[category] : null;
+
+  if (category && !categoryData) {
+    return [];
+  }
+
+  const { index, logos } = categoryData ?? { index: LOGOS_SEARCH_INDEX, logos: LOGOS_RESPONSE };
+  const indices = index.search(search) as number[];
+  return indices.map(i => logos[i]);
+}
+
 export function getLogos(params: GetLogosParams = {}): ListResponse<LogoItemsResponse> {
   const { category, search, limit, skip = 0, sortBy = LogosSortBy.NameAsc } = params;
 
-  let results: LogoItemsResponse[];
+  const results = getResults(search, category);
 
-  if (search) {
-    if (category) {
-      // Search within category using per-category index
-      const categoryData = CATEGORY_SEARCH_INDEXES[category];
-      if (!categoryData) {
-        results = [];
-      } else {
-        const indices = categoryData.index.search(search) as number[];
-        results = indices.map(i => categoryData.logos[i]);
-      }
-    } else {
-      // Search all logos using global index
-      const indices = LOGOS_SEARCH_INDEX.search(search) as number[];
-      results = indices.map(i => LOGOS_RESPONSE[i]);
-    }
-  } else {
-    // No search - return filtered by category or all
-    results = category ? (LOGOS_BY_CATEGORY[category] ?? []) : LOGOS_RESPONSE;
-  }
-
-  // Sort
   const sorted = results.toSorted((a, b) =>
     sortBy === LogosSortBy.NameAsc
       ? a.name.localeCompare(b.name)
       : b.name.localeCompare(a.name)
   );
 
-  // Pagination
   const total = sorted.length;
-  if (limit === undefined) {
-    return { data: sorted, total };
-  }
+  const data = limit === undefined
+    ? sorted
+    : sorted.slice(clamp(skip, 0, total), clamp(skip + limit, 0, total));
 
-  const start = clamp(skip, 0, total);
-  const end = clamp(start + limit, 0, total);
-  return { data: sorted.slice(start, end), total };
+  return { data, total };
 }

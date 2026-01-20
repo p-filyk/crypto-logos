@@ -1,6 +1,9 @@
+import FlexSearch from 'flexsearch';
+
 // data
 import LOGOS_DATA from '@/api/logos.json';
-import FlexSearch from 'flexsearch';
+
+// models
 import LogoItemsResponse from '@/shared/models/logos/logo-items-response';
 
 function normalizeString(value: string): string {
