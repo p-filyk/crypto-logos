@@ -150,23 +150,28 @@ export const API_EXAMPLES = {
     request: 'curl {{baseUrl}}/api/categories',
     response: `[
   {
-    "category": "cryptocurrency",
+    "id": "cryptocurrency",
+    "name": "Cryptocurrency",
     "count": 287
   },
   {
-    "category": "defi",
+    "id": "defi",
+    "name": "DeFi",
     "count": 45
   },
   {
-    "category": "blockchain",
+    "id": "blockchain",
+    "name": "Blockchain",
     "count": 123
   },
   {
-    "category": "payment",
+    "id": "payment",
+    "name": "Payment",
     "count": 67
   },
   {
-    "category": "exchange",
+    "id": "exchange",
+    "name": "Exchange",
     "count": 54
   }
 ]`,

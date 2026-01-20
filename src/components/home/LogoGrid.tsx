@@ -6,11 +6,11 @@ import ListSentinel from '@/components/ListSentinel';
 import LogoCard from './LogoCard';
 
 // models
-import type LogoItem from '@/shared/models/logos/logo-item';
+import type LogoItemsResponse from '@/shared/models/logos/logo-items-response';
 
 // custom models
 interface Props {
-  logos: LogoItem[];
+  logos: LogoItemsResponse[];
   hasMore: boolean;
   onLoadMore: () => void;
   isLoading: boolean;

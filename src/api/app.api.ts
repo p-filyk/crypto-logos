@@ -7,14 +7,14 @@ import buildReqParams from '@/shared/helpers/build-req-params';
 
 // models
 import ListResponse from '@/shared/models/common/list-response';
-import LogoItem from '@/shared/models/logos/logo-item';
+import LogoItemsResponse from '@/shared/models/logos/logo-items-response';
 import CategoryListItem from '@/shared/models/categories/category-list-item';
 
 // custom constants
 const isServer = typeof window === 'undefined';
 
 const AppApi = {
-  async getLogos(params: GetLogosParams): Promise<ListResponse<LogoItem>> {
+  async getLogos(params: GetLogosParams): Promise<ListResponse<LogoItemsResponse>> {
     if (isServer) {
       return getLogosLib(params);
     }

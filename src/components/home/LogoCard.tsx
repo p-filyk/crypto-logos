@@ -8,11 +8,11 @@ import LogoCardTags from '@/components/home/LogoCardTags';
 import LogoCardContent from '@/components/home/LogoCardContent';
 
 // models
-import type LogoItem from '@/shared/models/logos/logo-item';
+import type LogoItemsResponse from '@/shared/models/logos/logo-items-response';
 
 // custom models
 interface Props {
-  logo: LogoItem;
+  logo: LogoItemsResponse;
 }
 
 export default function LogoCard({ logo }: Props) {
