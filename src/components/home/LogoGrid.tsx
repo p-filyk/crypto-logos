@@ -34,9 +34,9 @@ export default function LogoGrid({ logos, hasMore, onLoadMore, isLoading, EmptyS
   return (
     <div className="relative">
       <div className="grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] gap-4 px-3">
-        {logos.map((logo, index) => (
+        {logos.map((logo) => (
           <LogoCard
-            key={index}
+            key={logo.id}
             logo={logo}
           />
         ))}

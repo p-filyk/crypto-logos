@@ -37,7 +37,7 @@ export default function LogoCard({ logo }: Props) {
       </div>
 
       <LogoCardContent logo={logo}>
-        <h3 className="font-medium text-lg text-center mb-1">{logo.name}</h3>
+        <h3 className="font-medium text-lg text-center mb-1 break-all">{logo.name}</h3>
 
         <LogoCardTags
           mainCategory={logo.mainCategory}
