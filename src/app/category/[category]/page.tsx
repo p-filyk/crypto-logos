@@ -24,7 +24,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const { q: searchQuery } = await searchParams;
 
   // Get the count of logos in this category
-  const { total } = await getLogos({ category });
+  const { total } = getLogos({ category });
 
   const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
 

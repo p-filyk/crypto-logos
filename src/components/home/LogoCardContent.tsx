@@ -68,7 +68,7 @@ export default function LogoCardContent({ logo, children }: LogoCardContentProps
 
       {children}
 
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-4" onClick={(e) => e.stopPropagation()}>
         <CopyLogoPopover logo={logo} showWordmark={showWordmark}>
           <Button
             variant="ghost"

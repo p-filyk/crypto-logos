@@ -24,7 +24,7 @@ interface LogoCardTagsProps {
 
 export default function LogoCardTags({ mainCategory, secondaryCategories }: LogoCardTagsProps) {
   return (
-    <div className="flex items-center justify-center gap-2 mb-3 flex-wrap">
+    <div className="flex items-center justify-center gap-2 mb-3 flex-wrap" onClick={(e) => e.stopPropagation()}>
       <Link href={`/category/${mainCategory.id}`}>
         <Badge className="capitalize h-5.5 text-xs rounded-full px-3 cursor-pointer hover:bg-accent transition-colors" variant="outline">
           {mainCategory.name}

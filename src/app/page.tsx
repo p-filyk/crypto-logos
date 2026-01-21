@@ -42,9 +42,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 }
 
-export default async function Home({
-  searchParams,
-}: Props) {
+export default async function Home({ searchParams }: Props) {
   // common
   const queryClient = new QueryClient();
 

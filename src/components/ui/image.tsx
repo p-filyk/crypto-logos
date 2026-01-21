@@ -31,6 +31,7 @@ export function Image({
   // computed
   const allSrcs = [src, ...alternativeSrcs];
   const currentSrc = currentSrcIndex === -1 ? src : allSrcs[currentSrcIndex];
+  const isGif = src.includes('.gif');
 
   // effects
   useEffect(() => {
@@ -82,6 +83,7 @@ export function Image({
         width={width}
         height={height}
         quality={75}
+        unoptimized={isGif}
         className={cn('h-full object-contain', loading && 'opacity-0')}
         onLoad={handleLoad}
         onError={handleError}

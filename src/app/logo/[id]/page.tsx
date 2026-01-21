@@ -1,0 +1,131 @@
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import type { Metadata } from 'next';
+import { ExternalLink, Download } from 'lucide-react';
+
+// data
+import { LOGOS_BY_ID } from '@/shared/constants/logos-data';
+
+// components
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import LogoDisplaySection from '@/components/logo-detail/LogoDisplaySection';
+import LogoDetailDownloads from '@/components/logo-detail/LogoDetailDownloads';
+
+// custom models
+interface Props {
+  params: Promise<{ id: string }>;
+}
+
+export const dynamic = 'force-static';
+export const revalidate = 2_592_000; // 1 month
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const logo = LOGOS_BY_ID[id];
+
+  if (!logo) {
+    return {
+      title: 'Logo Not Found - Crypto Logos',
+    };
+  }
+
+  const title = `${logo.name} Logo - Crypto Logos`;
+  const description = `Download ${logo.name} logo or embed it to your website or application seamlessly.`;
+  const ogImage = logo.logo.icon.light[0]?.url;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      images: ogImage ? [{ url: ogImage }] : undefined,
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+      images: ogImage ? [ogImage] : undefined,
+    },
+  };
+}
+
+export default async function LogoDetailPage({ params }: Props) {
+  // common
+  const { id } = await params;
+  const logo = LOGOS_BY_ID[id];
+
+  if (!logo) {
+    notFound();
+  }
+
+  // computed
+  const allCategories = [logo.mainCategory, ...logo.secondaryCategories];
+
+  return (
+    <div className="flex-1 flex flex-col p-6 max-md:p-4 max-w-4xl mx-auto w-full">
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-2 text-sm mb-6">
+        <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+          Home
+        </Link>
+        <span className="text-muted-foreground">/</span>
+        <span>{logo.name}</span>
+      </nav>
+
+      {/* Logo display */}
+      <div className="mb-8">
+        <LogoDisplaySection logo={logo} />
+      </div>
+
+      {/* Title and tags */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold mb-3">{logo.name}</h1>
+        <div className="flex flex-wrap gap-2">
+          {allCategories.map((category) => (
+            <Link key={category.id} href={`/category/${category.id}`}>
+              <Badge variant="secondary" className="capitalize cursor-pointer hover:bg-accent">
+                {category.name}
+              </Badge>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <Separator className="mb-8" />
+
+      {/* Downloads */}
+      <LogoDetailDownloads logo={logo} />
+
+      <Separator className="my-8" />
+
+      {/* Links */}
+      {(logo.websiteLink || logo.brandKitLink) && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Links</h2>
+          <div className="flex flex-wrap gap-3">
+            {logo.websiteLink && (
+              <Button variant="outline" asChild>
+                <a href={logo.websiteLink} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Website
+                </a>
+              </Button>
+            )}
+            {logo.brandKitLink && (
+              <Button variant="outline" asChild>
+                <a href={logo.brandKitLink} target="_blank" rel="noopener noreferrer">
+                  <Download className="h-4 w-4 mr-2" />
+                  Brand Kit
+                </a>
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

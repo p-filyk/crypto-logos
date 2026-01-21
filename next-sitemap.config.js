@@ -53,6 +53,13 @@ module.exports = {
       lastmod: new Date().toISOString(),
     }));
 
+    const logoPaths = logosData.map((logo) => ({
+      loc: `/logo/${logo.id}`,
+      changefreq: 'monthly',
+      priority: 0.6,
+      lastmod: new Date().toISOString(),
+    }));
+
     return [
       {
         loc: '/',
@@ -67,6 +74,7 @@ module.exports = {
         lastmod: new Date().toISOString(),
       },
       ...categoryPaths,
+      ...logoPaths,
     ];
   },
 }

@@ -88,3 +88,9 @@ export const CATEGORY_SEARCH_INDEXES = Object.entries(LOGOS_BY_CATEGORY).reduce(
   acc[categoryId] = { index, logos };
   return acc;
 }, {} as Record<string, { index: typeof LOGOS_SEARCH_INDEX; logos: LogoItemsResponse[] }>);
+
+// Logo by ID map for O(1) lookup
+export const LOGOS_BY_ID = LOGOS_RESPONSE.reduce((acc, logo) => {
+  acc[logo.id] = logo;
+  return acc;
+}, {} as Record<string, LogoItemsResponse>);
