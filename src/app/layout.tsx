@@ -16,6 +16,9 @@ import { Toaster } from '@/components/ui/sonner';
 // styles
 import './globals.css';
 
+// constants
+import SERVER_BASE_URL from '@/shared/constants/server-base-url';
+
 // custom constants
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,13 +31,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : 'http://localhost:3000'
-  ),
+  metadataBase: SERVER_BASE_URL,
   title: 'Crypto Logos - Free SVG Logo Collection',
   description: 'Browse and download 576+ crypto and tech logos in SVG format',
   manifest: '/site.webmanifest',

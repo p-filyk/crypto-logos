@@ -33,7 +33,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `${logo.name} Logo - Crypto Logos`;
   const description = `Download ${logo.name} logo or embed it to your website or application seamlessly.`;
-  const ogImage = logo.logo.icon.light[0]?.url;
+  const allImages = [
+    ...logo.logo.icon.light,
+    ...(logo.logo.icon.dark || []),
+    ...(logo.logo.text?.light || []),
+    ...(logo.logo.text?.dark || []),
+  ];
+  const images = allImages
+    .filter(({ format }) => format !== 'svg')
+    .map(({ url }) => url);
 
   return {
     title,
@@ -42,13 +50,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       type: 'website',
-      images: ogImage ? [{ url: ogImage }] : undefined,
+      images,
     },
     twitter: {
       card: 'summary',
       title,
       description,
-      images: ogImage ? [ogImage] : undefined,
+      images,
     },
   };
 }

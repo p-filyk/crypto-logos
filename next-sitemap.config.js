@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const logosData = require('./src/api/logos.json');
+const SERVER_BASE_URL = require('./src/shared/constants/server-base-url.ts').default;
 
 function normalizeString(str) {
   return str
@@ -29,11 +30,7 @@ function getCategories() {
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000',
+  siteUrl: SERVER_BASE_URL,
   generateRobotsTxt: true,
   robotsTxtOptions: {
     policies: [
