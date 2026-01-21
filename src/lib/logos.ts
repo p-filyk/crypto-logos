@@ -42,12 +42,17 @@ export function getLogos(params: GetLogosParams = {}): ListResponse<LogoItemsRes
   const { category, search, limit, skip = 0, sortBy = LogosSortBy.NameAsc } = params;
 
   const results = getResults(search, category);
+  let sorted = results;
 
-  const sorted = results.toSorted((a, b) =>
-    sortBy === LogosSortBy.NameAsc
-      ? a.name.localeCompare(b.name)
-      : b.name.localeCompare(a.name)
-  );
+  if (search) {
+    sorted = results.toSorted((a, b) =>
+      sortBy === LogosSortBy.NameAsc
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name)
+    );
+  } else if (sortBy === LogosSortBy.NameDesc) {
+    sorted = results.toReversed();
+  }
 
   const total = sorted.length;
   const data = limit === undefined

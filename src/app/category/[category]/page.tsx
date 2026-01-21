@@ -13,6 +13,8 @@ import LogosSection from '@/components/home/LogosSection';
 // models
 import LogosSortBy from '@/shared/models/logos/logos-sort-by';
 
+export const revalidate = 3600; // 1 hour
+
 // custom models
 interface Props {
   params: Promise<{ category: string }>;
@@ -39,6 +41,9 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   return {
     title,
     description,
+    robots: searchQuery
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
     openGraph: {
       title,
       description,

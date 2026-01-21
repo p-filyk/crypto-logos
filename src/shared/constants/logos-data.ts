@@ -40,7 +40,7 @@ export const CATEGORY_MAP = CATEGORIES_RESPONSE.reduce((acc, category) => {
   return acc;
 }, {} as Record<string, typeof CATEGORIES_RESPONSE[number]>);
 
-// logos
+// logos (pre-sorted by name ascending for performance)
 export const LOGOS_RESPONSE: LogoItemsResponse[] = LOGOS_DATA.map(({ mainCategory, secondaryCategories, ...other }) => ({
   ...other,
   mainCategory: {
@@ -51,9 +51,10 @@ export const LOGOS_RESPONSE: LogoItemsResponse[] = LOGOS_DATA.map(({ mainCategor
     id: getCategoryIdByName(category),
     name: category,
   })),
-})) as unknown as LogoItemsResponse[];
+})).toSorted((a, b) => a.name.localeCompare(b.name)) as unknown as LogoItemsResponse[];
 
-export const LOGOS_BY_CATEGORY = LOGOS_RESPONSE.reduce((acc, logo) => {
+// Pre-sorted by name ascending for performance
+const LOGOS_BY_CATEGORY_UNSORTED = LOGOS_RESPONSE.reduce((acc, logo) => {
   const categoryId = logo.mainCategory.id;
 
   acc[categoryId] = acc[categoryId] ?? [];
@@ -66,6 +67,13 @@ export const LOGOS_BY_CATEGORY = LOGOS_RESPONSE.reduce((acc, logo) => {
 
   return acc;
 }, {} as Record<string, LogoItemsResponse[]>);
+
+export const LOGOS_BY_CATEGORY = Object.fromEntries(
+  Object.entries(LOGOS_BY_CATEGORY_UNSORTED).map(([key, logos]) => [
+    key,
+    logos.toSorted((a, b) => a.name.localeCompare(b.name)),
+  ])
+);
 
 // Global search index (all logos)
 export const LOGOS_SEARCH_INDEX = new FlexSearch.Index({

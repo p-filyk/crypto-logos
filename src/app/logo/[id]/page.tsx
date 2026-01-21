@@ -28,27 +28,43 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!logo) {
     return {
       title: 'Logo Not Found - Crypto Logos',
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
   const title = `${logo.name} Logo - Crypto Logos`;
   const description = `Download ${logo.name} logo or embed it to your website or application seamlessly.`;
-  const ogImage = logo.logo.icon.light[0]?.url;
+  const allImages = [
+    ...logo.logo.icon.light,
+    ...(logo.logo.icon.dark || []),
+    ...(logo.logo.text?.light || []),
+    ...(logo.logo.text?.dark || []),
+  ];
+  const images = allImages
+    .filter(({ format }) => format !== 'svg')
+    .map(({ url }) => url);
 
   return {
     title,
     description,
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
       title,
       description,
       type: 'website',
-      images: ogImage ? [{ url: ogImage }] : undefined,
+      images,
     },
     twitter: {
       card: 'summary',
       title,
       description,
-      images: ogImage ? [ogImage] : undefined,
+      images,
     },
   };
 }
@@ -109,7 +125,7 @@ export default async function LogoDetailPage({ params }: Props) {
           <div className="flex flex-wrap gap-3">
             {logo.websiteLink && (
               <Button variant="outline" asChild>
-                <a href={logo.websiteLink} target="_blank" rel="noopener noreferrer">
+                <a href={logo.websiteLink} target="_blank" rel="noopener noreferrer nofollow">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Website
                 </a>
@@ -117,7 +133,7 @@ export default async function LogoDetailPage({ params }: Props) {
             )}
             {logo.brandKitLink && (
               <Button variant="outline" asChild>
-                <a href={logo.brandKitLink} target="_blank" rel="noopener noreferrer">
+                <a href={logo.brandKitLink} target="_blank" rel="noopener noreferrer nofollow">
                   <Download className="h-4 w-4 mr-2" />
                   Brand Kit
                 </a>

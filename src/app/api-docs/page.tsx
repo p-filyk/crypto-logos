@@ -10,12 +10,15 @@ import TableOfContents from '@/components/api-docs/TableOfContents';
 import CodeBlock from '@/components/api-docs/CodeBlock';
 
 // constants
-import { API_EXAMPLES } from '@/lib/api-examples';
+import { API_EXAMPLES } from '@/shared/constants/api-examples';
 
 export const metadata: Metadata = {
   title: 'API Documentation - Crypto Logos',
-  description:
-    'Complete API documentation for the Crypto Logos API endpoints',
+  description: 'Complete API documentation for the Crypto Logos API endpoints',
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const typescriptTypes = `type LogoFileFormat = 'svg'

@@ -60,7 +60,7 @@ export default async function Header() {
             <a
               href={GITHUB_LINK_URL}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
               className="flex items-center"
             >
               <Github className="h-4 w-4"/>
@@ -72,7 +72,7 @@ export default async function Header() {
             <a
               href={GITHUB_GET_STARTED_LINK_URL}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
             >
               <Send className="h-4 w-4" />
               Submit
