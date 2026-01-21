@@ -30,7 +30,7 @@ export default function LogoCard({ logo }: Props) {
               aria-label={`View ${logo.name} brand kit`}
               asChild
             >
-              <a href={logo.brandKitLink} target="_blank" rel="noopener noreferrer">
+              <a href={logo.brandKitLink} target="_blank" rel="noopener noreferrer nofollow">
                 <Palette className="h-5 w-5" />
               </a>
             </Button>

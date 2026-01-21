@@ -28,6 +28,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!logo) {
     return {
       title: 'Logo Not Found - Crypto Logos',
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
@@ -46,6 +50,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
       title,
       description,
@@ -117,7 +125,7 @@ export default async function LogoDetailPage({ params }: Props) {
           <div className="flex flex-wrap gap-3">
             {logo.websiteLink && (
               <Button variant="outline" asChild>
-                <a href={logo.websiteLink} target="_blank" rel="noopener noreferrer">
+                <a href={logo.websiteLink} target="_blank" rel="noopener noreferrer nofollow">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Website
                 </a>
@@ -125,7 +133,7 @@ export default async function LogoDetailPage({ params }: Props) {
             )}
             {logo.brandKitLink && (
               <Button variant="outline" asChild>
-                <a href={logo.brandKitLink} target="_blank" rel="noopener noreferrer">
+                <a href={logo.brandKitLink} target="_blank" rel="noopener noreferrer nofollow">
                   <Download className="h-4 w-4 mr-2" />
                   Brand Kit
                 </a>

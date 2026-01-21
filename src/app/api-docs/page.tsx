@@ -14,8 +14,11 @@ import { API_EXAMPLES } from '@/shared/constants/api-examples';
 
 export const metadata: Metadata = {
   title: 'API Documentation - Crypto Logos',
-  description:
-    'Complete API documentation for the Crypto Logos API endpoints',
+  description: 'Complete API documentation for the Crypto Logos API endpoints',
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const typescriptTypes = `type LogoFileFormat = 'svg'
